@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.administrator.slidermeue0719.drag.DragLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context="com.example.administrator.slidermeue0719.MainActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#66ff0000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="1111111111111111"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#6600ff00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="222222222222222222222222"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</com.example.administrator.slidermeue0719.drag.DragLayout>
