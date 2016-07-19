@@ -112,6 +112,8 @@ public class DragLayout extends FrameLayout {
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             super.onViewReleased(releasedChild, xvel, yvel);
             Log.d("t","x:"+xvel+" y:"+yvel);
+            Log.d("t","x:"+xvel+" y:"+yvel);
+
         }
     };
 
