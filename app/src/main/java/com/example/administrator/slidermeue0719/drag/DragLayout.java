@@ -1,6 +1,7 @@
 package com.example.administrator.slidermeue0719.drag;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -112,10 +113,55 @@ public class DragLayout extends FrameLayout {
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             super.onViewReleased(releasedChild, xvel, yvel);
             Log.d("t","x:"+xvel+" y:"+yvel);
-            Log.d("t","x:"+xvel+" y:"+yvel);
 
+
+            if (xvel == 0 && mMainContent.getLeft() > mRange / 2.0f){
+                open();
+            }else if (xvel > 0){
+                open();
+            }else{
+                close();
+            }
         }
     };
+    //重构代码
+    public void close(){
+        close(true);
+    }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        //2.持续平滑动画(高频调用)
+        if (mDragHelper.continueSettling(true)){
+            //如果返回true,动画还需要继续执行
+            ViewCompat.postInvalidateOnAnimation(this);
+        }
+    }
+
+    //关闭
+    private void close(boolean isSmooth) {
+        int finalLeft = 0;
+        if (isSmooth){
+            //1.触发一个平滑动画
+            if (mDragHelper.smoothSlideViewTo(mMainContent,finalLeft,0)){
+                //返回true代表还没有移动到指定位置,需要刷新界面
+                //参数传this(child所在的ViewGroup)
+                ViewCompat.postInvalidateOnAnimation(this);
+            }
+        }else{
+            mMainContent.layout(finalLeft,0,finalLeft+mWidth,0+mHeight);
+        }
+    }
+
+    public void open(){
+        open(true);
+    }
+    //开启
+    private void open(boolean isSmooth) {
+        int finalLeft = mRange;
+        mMainContent.layout(finalLeft,0,finalLeft+mWidth,0+mHeight);
+    }
 
     /**
      * 根据范围修正左边值
