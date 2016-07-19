@@ -98,6 +98,7 @@ public class DragLayout extends FrameLayout {
                 mLeftContent.layout(0, 0, 0 + mWidth, 0 + mHeight);
                 mMainContent.layout(newLeft, 0, newLeft + mWidth, 0 + mHeight);
             }
+            dispatchDragEvent(newLeft);
             //为了兼容低版本,每次修改之后,进行重绘
             invalidate();
         }
@@ -112,20 +113,30 @@ public class DragLayout extends FrameLayout {
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             super.onViewReleased(releasedChild, xvel, yvel);
-            Log.d("t","x:"+xvel+" y:"+yvel);
+            Log.d("t", "x:" + xvel + " y:" + yvel);
 
 
-            if (xvel == 0 && mMainContent.getLeft() > mRange / 2.0f){
+            if (xvel == 0 && mMainContent.getLeft() > mRange / 2.0f) {
                 open();
-            }else if (xvel > 0){
+            } else if (xvel > 0) {
                 open();
-            }else{
+            } else {
                 close();
             }
         }
     };
+
+    private void dispatchDragEvent(int newLeft) {
+        float percent = newLeft * 1.0f / mRange;
+        Log.d("p", "percent:" + percent);
+        // 伴随动画：
+        //  1.左面板：缩放动画，平移动画,透明度动画
+        mLeftContent.setScaleX(0.5f + 0.5f * percent);
+        mLeftContent.setScaleY(0.5f + 0.5f * percent);
+    }
+
     //重构代码
-    public void close(){
+    public void close() {
         close(true);
     }
 
@@ -133,7 +144,7 @@ public class DragLayout extends FrameLayout {
     public void computeScroll() {
         super.computeScroll();
         //2.持续平滑动画(高频调用)
-        if (mDragHelper.continueSettling(true)){
+        if (mDragHelper.continueSettling(true)) {
             //如果返回true,动画还需要继续执行
             ViewCompat.postInvalidateOnAnimation(this);
         }
@@ -142,25 +153,35 @@ public class DragLayout extends FrameLayout {
     //关闭
     private void close(boolean isSmooth) {
         int finalLeft = 0;
-        if (isSmooth){
+        if (isSmooth) {
             //1.触发一个平滑动画
-            if (mDragHelper.smoothSlideViewTo(mMainContent,finalLeft,0)){
+            if (mDragHelper.smoothSlideViewTo(mMainContent, finalLeft, 0)) {
                 //返回true代表还没有移动到指定位置,需要刷新界面
                 //参数传this(child所在的ViewGroup)
                 ViewCompat.postInvalidateOnAnimation(this);
             }
-        }else{
-            mMainContent.layout(finalLeft,0,finalLeft+mWidth,0+mHeight);
+        } else {
+            mMainContent.layout(finalLeft, 0, finalLeft + mWidth, 0 + mHeight);
         }
     }
 
-    public void open(){
+    public void open() {
         open(true);
     }
+
     //开启
     private void open(boolean isSmooth) {
         int finalLeft = mRange;
-        mMainContent.layout(finalLeft,0,finalLeft+mWidth,0+mHeight);
+        if (isSmooth) {
+            //1.触发一个平滑动画
+            if (mDragHelper.smoothSlideViewTo(mMainContent, finalLeft, 0)) {
+                //返回true代表还没有移动到指定位置,需要刷新界面
+                //参数传this(child所在的ViewGroup)
+                ViewCompat.postInvalidateOnAnimation(this);
+            }
+        } else {
+            mMainContent.layout(finalLeft, 0, finalLeft + mWidth, 0 + mHeight);
+        }
     }
 
     /**
