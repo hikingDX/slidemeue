@@ -133,6 +133,13 @@ public class DragLayout extends FrameLayout {
         //  1.左面板：缩放动画，平移动画,透明度动画
         mLeftContent.setScaleX(0.5f + 0.5f * percent);
         mLeftContent.setScaleY(0.5f + 0.5f * percent);
+        mLeftContent.setTranslationX(evaluate(percent,-mWidth / 2.0f,0));
+        //2.主面板:缩放动画
+        //3.背景动画:亮度变化
+    }
+    public Float evaluate(float fraction,Number startValue,Number endValue){
+        float startFloat = startValue.floatValue();
+        return startFloat + fraction*(endValue.floatValue() - startValue.floatValue());
     }
 
     //重构代码
