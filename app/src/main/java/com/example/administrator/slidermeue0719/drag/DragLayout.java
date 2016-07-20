@@ -134,7 +134,11 @@ public class DragLayout extends FrameLayout {
         mLeftContent.setScaleX(0.5f + 0.5f * percent);
         mLeftContent.setScaleY(0.5f + 0.5f * percent);
         mLeftContent.setTranslationX(evaluate(percent,-mWidth / 2.0f,0));
+        mLeftContent.setAlpha(evaluate(percent,0.5f,1.0f));
         //2.主面板:缩放动画
+        //1.0->0.8f
+        mMainContent.setScaleX(evaluate(percent,1.0f,0.8f));
+        mMainContent.setScaleY(evaluate(percent,1.0f,0.8f));
         //3.背景动画:亮度变化
     }
     public Float evaluate(float fraction,Number startValue,Number endValue){
